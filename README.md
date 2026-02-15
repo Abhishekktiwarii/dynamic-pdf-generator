@@ -288,19 +288,6 @@ The layout is defined using a Thymeleaf HTML template.
 
 ---
 
-# 🔮 Possible Improvements
-
-* Swagger/OpenAPI documentation
-* Request validation
-* Global exception handling
-* Unit tests (TDD)
-* Docker deployment
-* Cloud storage integration
-* Database-based caching
-* Authentication and authorization
-
----
-
 # 👨‍💻 Author
 
 **Abhishek Tiwari**
