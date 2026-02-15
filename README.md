@@ -1,86 +1,101 @@
+# 📄 Dynamic PDF Generation API (Spring Boot)
 
-# ✅ **README.md — Dynamic PDF Generation API**
+A **Spring Boot REST API** that dynamically generates **invoice-style PDF documents** from JSON input using a Java template engine.
+The generated PDF is stored locally and automatically reused when the same request data is provided again.
 
-```markdown
-# 📄 Dynamic PDF Generation API
-
-A Spring Boot REST API that generates invoice-style PDFs dynamically from JSON input using a Java template engine. The generated PDF is stored locally and reused when the same input is provided again.
-
-This application demonstrates dynamic document generation, caching strategy, and REST API design using Spring Boot.
+This project demonstrates **dynamic document generation, REST API design, template rendering, and caching strategy**.
 
 ---
 
-## 🚀 Features
+# 🚀 Overview
 
-✅ Generate invoice PDF from request data  
-✅ Store generated PDF in local storage  
-✅ Return existing PDF if same data is provided (caching)  
-✅ Download generated PDF via REST API  
-✅ Thymeleaf template-based PDF layout  
-✅ Testable using Postman / Swagger  
-✅ Clean layered architecture  
+This application exposes a REST API that:
 
----
+* Accepts invoice data via JSON request
+* Generates a formatted invoice PDF using a template engine
+* Stores the generated PDF in local storage
+* Returns an existing PDF when identical data is provided again
+* Provides downloadable PDF response
 
-## 🏗️ Tech Stack
-
-- Java 17+
-- Spring Boot 3
-- Spring Web (REST API)
-- Thymeleaf (Template Engine)
-- OpenHTMLToPDF (HTML → PDF conversion)
-- Lombok
-- Maven
+The system improves performance by avoiding duplicate PDF generation through request-based caching.
 
 ---
 
-## 📂 Project Structure
+# ✨ Features
+
+✅ Generate invoice PDF dynamically from request data
+✅ Store generated PDF in local storage
+✅ Reuse existing PDF for identical requests (caching mechanism)
+✅ Download generated PDF via REST API
+✅ Clean layered architecture (Controller → Service → Utility)
+✅ Thymeleaf template-based invoice layout
+✅ Testable using Postman or Swagger
+
+---
+
+# 🏗️ Tech Stack
+
+* **Java 17+**
+* **Spring Boot 3**
+* **Spring Web (REST API)**
+* **Thymeleaf (Template Engine)**
+* **OpenHTMLToPDF (HTML → PDF conversion)**
+* **Lombok**
+* **Maven**
+
+---
+
+# 📂 Project Structure
 
 ```
-
-src/main/java/com/pdfgenerator
+dynamic-pdf
 │
-├── controller        → REST endpoints
-├── service           → Business logic
-├── model             → Request DTOs
-├── util              → PDF generation utility
+├── src/main/java/com/pdfgenerator
+│   ├── controller        # REST API endpoints
+│   ├── service           # Business logic
+│   ├── model             # Request DTOs
+│   ├── util              # PDF generation utility
+│   └── DynamicPdfApplication.java
 │
-src/main/resources
-├── templates         → Thymeleaf HTML templates
-├── application.properties
-
-````
+├── src/main/resources
+│   ├── templates         # Thymeleaf HTML template
+│   └── application.properties
+│
+└── generated-pdfs        # Stored generated PDFs
+```
 
 ---
 
-## ⚙️ Setup Instructions
+# ⚙️ Setup & Installation
 
-### 1. Clone Project
+## 1️⃣ Clone Repository
 
-```bash
-git clone <repo-url>
+```
+git clone <repository-url>
 cd dynamic-pdf
-````
+```
 
 ---
 
-### 2. Install Dependencies
+## 2️⃣ Install Dependencies
 
-```bash
+```
 mvn clean install
 ```
 
 ---
 
-### 3. Configure Application
+## 3️⃣ Configure Application
 
-Edit:
+Open:
 
 ```
 src/main/resources/application.properties
 ```
 
-```properties
+Add or verify:
+
+```
 server.port=8081
 spring.thymeleaf.cache=false
 pdf.storage.path=./generated-pdfs
@@ -88,13 +103,13 @@ pdf.storage.path=./generated-pdfs
 
 ---
 
-### 4. Run Application
+## 4️⃣ Run Application
 
-```bash
+```
 mvn spring-boot:run
 ```
 
-Server starts:
+Application runs at:
 
 ```
 http://localhost:8081
@@ -102,11 +117,9 @@ http://localhost:8081
 
 ---
 
-## 📌 API Documentation
+# 📌 API Documentation
 
----
-
-### ⭐ Generate Invoice PDF
+## ⭐ Generate Invoice PDF
 
 ### Endpoint
 
@@ -116,7 +129,7 @@ POST /api/pdf/generate
 
 ---
 
-### Request Headers
+## Request Headers
 
 ```
 Content-Type: application/json
@@ -124,9 +137,9 @@ Content-Type: application/json
 
 ---
 
-### Request Body Schema
+## Request Body Schema
 
-```json
+```
 {
   "seller": "string",
   "sellerGstin": "string",
@@ -138,8 +151,8 @@ Content-Type: application/json
     {
       "name": "string",
       "quantity": "string",
-      "rate": 0,
-      "amount": 0
+      "rate": number,
+      "amount": number
     }
   ]
 }
@@ -147,9 +160,11 @@ Content-Type: application/json
 
 ---
 
-### Sample Test Data (Use in Postman)
+## Sample Request (Testing Data)
 
-```json
+Use this in Postman:
+
+```
 {
   "seller": "XYZ Pvt. Ltd.",
   "sellerGstin": "29AABBCCDD121ZD",
@@ -176,22 +191,23 @@ Content-Type: application/json
 
 ---
 
-### Response
+## Response
 
 ```
 200 OK
 ```
 
-* Returns downloadable PDF file.
-* Stored locally for reuse.
+* Returns downloadable PDF file
+* PDF stored locally
+* Same request returns cached PDF
 
 ---
 
-## 🧪 Testing with Postman
+# 🧪 Testing Using Postman
 
 ### Steps
 
-1. Start application
+1. Start the application
 2. Open Postman
 3. Create POST request:
 
@@ -207,11 +223,11 @@ Content-Type: application/json
 
 5. Paste sample JSON
 6. Click **Send**
-7. PDF will download.
+7. PDF will download automatically
 
 ---
 
-## 💾 Storage Behavior (Caching)
+# 💾 Storage & Caching Strategy
 
 * Generated PDFs stored in:
 
@@ -219,73 +235,72 @@ Content-Type: application/json
 generated-pdfs/
 ```
 
-* System generates a unique hash based on request data.
-* If same request is sent again:
+* System generates a unique hash from request data.
+* If the same request is sent again:
 
-  * Existing PDF returned
-  * New PDF not generated
+  * Existing PDF is returned
+  * New PDF is not generated
 
-This improves performance and avoids duplicate processing.
+This improves performance and prevents duplicate processing.
 
 ---
 
-## 🎯 How It Works (Flow)
+# ⚙️ Application Flow
 
 ```
 Client Request
-     ↓
+      ↓
 REST Controller
-     ↓
+      ↓
+Service Layer
+      ↓
 Thymeleaf Template Rendering
-     ↓
+      ↓
 HTML → PDF Conversion
-     ↓
+      ↓
 Local Storage Save
-     ↓
+      ↓
 Return PDF Response
 ```
 
 ---
 
-## 📄 PDF Layout
+# 📄 Generated PDF Contents
 
-PDF contains:
+The generated PDF includes:
 
-* Seller details
-* Buyer details
+* Seller information
+* Buyer information
 * Item table
-* Quantity, rate, amount
+* Quantity, rate, and amount details
+* Invoice-style layout
 
-Generated using Thymeleaf HTML template.
+The layout is defined using a Thymeleaf HTML template.
 
 ---
 
-## ⚠️ Assumptions
+# ⚠️ Assumptions
 
-* No database required.
-* Local file storage used.
+* No database is used.
+* Local file storage is used for caching.
 * Single-page invoice format.
 * Only REST APIs implemented (no UI).
 
 ---
 
-## 🔮 Possible Improvements
+# 🔮 Possible Improvements
 
 * Swagger/OpenAPI documentation
 * Request validation
 * Global exception handling
 * Unit tests (TDD)
-* Docker support
+* Docker deployment
 * Cloud storage integration
-* Database caching
-* Authentication & authorization
+* Database-based caching
+* Authentication and authorization
 
 ---
 
-## 👨‍💻 Author
+# 👨‍💻 Author
 
-Abhishek Tiwari
-
-```
-
----
+**Abhishek Tiwari**
